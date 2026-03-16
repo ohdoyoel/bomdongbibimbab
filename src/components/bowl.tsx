@@ -413,11 +413,18 @@ function rand(seed: number): number {
   return h / 4294967296;
 }
 
-/** Random point inside the bowl circle (center 120, radius ~75) */
+/** Random point inside the bowl circle (center 120, radius ~88)
+ *  Uses rejection sampling: pick x,y in square, reject if outside circle */
 function randInBowl(seed: number): [number, number] {
-  const angle = rand(seed * 131 + 7) * Math.PI * 2;
-  const r = Math.sqrt(rand(seed * 137 + 13)) * 75;
-  return [120 + Math.cos(angle) * r, 120 + Math.sin(angle) * r];
+  // Try up to 5 attempts, fallback to polar
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const x = (rand(seed + attempt * 9973) * 2 - 1) * 88;
+    const y = (rand(seed + attempt * 9973 + 4999) * 2 - 1) * 88;
+    if (x * x + y * y <= 88 * 88) {
+      return [120 + x, 120 + y];
+    }
+  }
+  return [120, 120];
 }
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
