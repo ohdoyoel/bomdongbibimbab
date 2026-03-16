@@ -28,7 +28,7 @@ const TABLE_BASE: { id: string; left: number; top: number; size: number }[] = [
   { id: "egg",         left: 68,  top: -14, size: 34 },
   // left column — 2 items stacked, no overlap with each other or bowl
   { id: "gochugaru",   left: -14, top: 22,  size: 34 },
-  { id: "garlic",      left: -12, top: 62,  size: 32 },
+  { id: "garlic",      left: -12, top: 54,  size: 32 },
   // right column — 2 items stacked
   { id: "gochujang",   left: 78,  top: 22,  size: 34 },
   { id: "sesameOil",   left: 80,  top: 60,  size: 30 },
