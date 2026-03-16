@@ -5,7 +5,7 @@ import React from "react";
 // Precomputed rice grains: [cx, cy, rx, ry, rotation, isDark]
 const RICE_GRAINS: [number, number, number, number, number, boolean][] = (() => {
   // Simple integer-based hash for determinism across server/client
-  function h(s: number) { return ((s * 2654435761) >>> 0) / 4294967296; }
+  function h(s: number) { let v = (s * 2654435761) >>> 0; v = ((v ^ (v >> 16)) * 0x45d9f3b) >>> 0; v = ((v ^ (v >> 16)) * 0x45d9f3b) >>> 0; return ((v ^ (v >> 16)) >>> 0) / 4294967296; }
   const grains: [number, number, number, number, number, boolean][] = [];
   for (let i = 0; i < 40; i++) {
     const angle = h(i * 5) * Math.PI * 2;

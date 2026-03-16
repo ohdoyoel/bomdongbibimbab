@@ -400,13 +400,17 @@ function MixedView({
 
 /** Deterministic hash-based random 0~1 (identical on server & client) */
 function rand(seed: number): number {
-  return ((seed * 2654435761) >>> 0) / 4294967296;
+  let h = (seed * 2654435761) >>> 0;
+  h = ((h ^ (h >> 16)) * 0x45d9f3b) >>> 0;
+  h = ((h ^ (h >> 16)) * 0x45d9f3b) >>> 0;
+  h = (h ^ (h >> 16)) >>> 0;
+  return h / 4294967296;
 }
 
 /** Random point inside the bowl circle (center 120, radius ~75) */
 function randInBowl(seed: number): [number, number] {
-  const angle = rand(seed) * Math.PI * 2;
-  const r = Math.sqrt(rand(seed + 1)) * 75;
+  const angle = rand(seed * 131 + 7) * Math.PI * 2;
+  const r = Math.sqrt(rand(seed * 137 + 13)) * 75;
   return [120 + Math.cos(angle) * r, 120 + Math.sin(angle) * r];
 }
 

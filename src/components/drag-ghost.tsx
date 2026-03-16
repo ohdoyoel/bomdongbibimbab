@@ -32,7 +32,11 @@ export function DragGhost({ ingredient, position, bowlPx = 300 }: DragGhostProps
 }
 
 function rand(seed: number): number {
-  return ((seed * 2654435761) >>> 0) / 4294967296;
+  let h = (seed * 2654435761) >>> 0;
+  h = ((h ^ (h >> 16)) * 0x45d9f3b) >>> 0;
+  h = ((h ^ (h >> 16)) * 0x45d9f3b) >>> 0;
+  h = (h ^ (h >> 16)) >>> 0;
+  return h / 4294967296;
 }
 
 /** Same visuals as IngredientDrop in bowl.tsx, centered at 120,120 (bowl center) */
