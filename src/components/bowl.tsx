@@ -406,11 +406,13 @@ function MixedView({
 
 /** Deterministic hash-based random 0~1 (identical on server & client) */
 function rand(seed: number): number {
-  let h = (seed * 2654435761) >>> 0;
-  h = ((h ^ (h >> 16)) * 0x45d9f3b) >>> 0;
-  h = ((h ^ (h >> 16)) * 0x45d9f3b) >>> 0;
-  h = (h ^ (h >> 16)) >>> 0;
-  return h / 4294967296;
+  let a = seed | 0;
+  a = (a ^ 61) ^ (a >>> 16);
+  a = a + (a << 3);
+  a = a ^ (a >>> 4);
+  a = Math.imul(a, 0x27d4eb2d);
+  a = a ^ (a >>> 15);
+  return (a >>> 0) / 4294967296;
 }
 
 /** Random point inside the bowl circle (center 120, radius ~88)
