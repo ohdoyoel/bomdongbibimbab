@@ -269,12 +269,13 @@ function MixedView({
       {riceCount > 0 && (
         <g opacity={Math.min(0.2 + riceCount * 0.08, 0.6)}>
           {Array.from({ length: riceCount * 40 }, (_, i) => {
-            const [x, y] = randInBowl(i * 3 + 900);
-            const rot = rand(i * 3 + 901) * 180;
-            const size = 3.5 + rand(i * 3 + 902) * 2.5;
+            const s = i * 6067 + 60013;
+            const [x, y] = randInBowl(s);
+            const rot = rand(s + 3001) * 180;
+            const size = 3.5 + rand(s + 5003) * 2.5;
             return (
               <ellipse key={`rg${i}`} cx={x} cy={y} rx={size} ry={size * 0.4} fill="#FFF"
-                opacity={0.3 + rand(i * 3 + 903) * 0.3}
+                opacity={0.3 + rand(s + 7001) * 0.3}
                 transform={`rotate(${rot} ${x} ${y})`} />
             );
           })}
@@ -294,10 +295,11 @@ function MixedView({
         return (
           <g>
             {Array.from({ length: n }, (_, i) => {
-              const [x, y] = randInBowl(i * 7 + 100);
-              const rx = 6 + rand(i * 7 + 101) * 4;
-              const ry = 3 + rand(i * 7 + 102) * 3;
-              const rot = rand(i * 7 + 103) * 360 - 180;
+              const s = i * 1013 + 10007;
+              const [x, y] = randInBowl(s);
+              const rx = 6 + rand(s + 3001) * 4;
+              const ry = 3 + rand(s + 5003) * 3;
+              const rot = rand(s + 7001) * 360 - 180;
               return (
                 <g key={`gc${i}`}>
                   <ellipse cx={x} cy={y} rx={rx} ry={ry} fill="#E64A19" transform={`rotate(${rot} ${x} ${y})`} />
@@ -315,10 +317,11 @@ function MixedView({
         return (
           <g>
             {Array.from({ length: n }, (_, i) => {
-              const [x, y] = randInBowl(i * 7 + 200);
-              const rx = 10 + rand(i * 7 + 201) * 10;
-              const ry = 7 + rand(i * 7 + 202) * 6;
-              const rot = rand(i * 7 + 203) * 360 - 180;
+              const s = i * 2027 + 20011;
+              const [x, y] = randInBowl(s);
+              const rx = 10 + rand(s + 3001) * 10;
+              const ry = 7 + rand(s + 5003) * 6;
+              const rot = rand(s + 7001) * 360 - 180;
               return (
                 <g key={`b${i}`}>
                   <ellipse cx={x} cy={y} rx={rx} ry={ry} fill="#6DBE45" transform={`rotate(${rot} ${x} ${y})`} />
@@ -338,10 +341,11 @@ function MixedView({
         return (
           <g>
             {Array.from({ length: n }, (_, i) => {
-              const [x, y] = randInBowl(i * 7 + 300);
-              const rx = 9 + rand(i * 7 + 301) * 7;
-              const ry = 4 + rand(i * 7 + 302) * 4;
-              const rot = rand(i * 7 + 303) * 360 - 180;
+              const s = i * 3037 + 30013;
+              const [x, y] = randInBowl(s);
+              const rx = 9 + rand(s + 3001) * 7;
+              const ry = 4 + rand(s + 5003) * 4;
+              const rot = rand(s + 7001) * 360 - 180;
               return (
                 <ellipse key={`ew${i}`} cx={x} cy={y} rx={rx} ry={ry} fill="#FFFEF8"
                   transform={`rotate(${rot} ${x} ${y})`} stroke="#F0EAD6" strokeWidth="0.3" />
@@ -357,8 +361,9 @@ function MixedView({
         return (
           <g>
             {Array.from({ length: n }, (_, i) => {
-              const [x, y] = randInBowl(i * 7 + 400);
-              const rot = rand(i * 7 + 401) * 360;
+              const s = i * 4049 + 40009;
+              const [x, y] = randInBowl(s);
+              const rot = rand(s + 7001) * 360;
               return (
                 <rect key={`g${i}`} x={x - 2.5} y={y - 2} width="5" height="4" rx="1.5"
                   fill="#F5EDD5" stroke="#DDD5C0" strokeWidth="0.3"
@@ -375,8 +380,9 @@ function MixedView({
         return (
           <g>
             {Array.from({ length: n }, (_, i) => {
-              const [x, y] = randInBowl(i * 7 + 500);
-              const rot = rand(i * 7 + 501) * 360 - 180;
+              const s = i * 5051 + 50021;
+              const [x, y] = randInBowl(s);
+              const rot = rand(s + 7001) * 360 - 180;
               return (
                 <ellipse key={`s${i}`} cx={x} cy={y} rx="3" ry="1.5" fill="#F5E6B8"
                   transform={`rotate(${rot} ${x} ${y})`} />
