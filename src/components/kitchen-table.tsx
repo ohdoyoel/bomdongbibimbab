@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import type { Ingredient, DroppedItem } from "@/lib/cooking-steps";
 import { INGREDIENTS, BOWL_CAPACITY } from "@/lib/cooking-steps";
 import { Bowl } from "@/components/bowl";
@@ -38,8 +38,18 @@ const TABLE_BASE: { id: string; left: number; top: number; size: number }[] = [
   { id: "sesameSeeds", left: 68,  top: 82,  size: 32 },
 ];
 
-/** Generate random positions once per page load (uses Math.random) */
-function generatePositions() {
+/** Static default positions (used for SSR, no randomness) */
+function staticPositions() {
+  return Object.fromEntries(
+    TABLE_BASE.map((item) => [
+      item.id,
+      { left: `${item.left}%`, top: `${item.top}%`, size: `${item.size}%`, rotate: "0deg" },
+    ])
+  );
+}
+
+/** Random positions generated client-side only */
+function randomPositions() {
   return Object.fromEntries(
     TABLE_BASE.map((item) => {
       const offX = (Math.random() - 0.5) * 4;
@@ -47,12 +57,7 @@ function generatePositions() {
       const rot = (Math.random() - 0.5) * 30;
       return [
         item.id,
-        {
-          left: `${item.left + offX}%`,
-          top: `${item.top + offY}%`,
-          size: `${item.size}%`,
-          rotate: `${rot.toFixed(1)}deg`,
-        },
+        { left: `${item.left + offX}%`, top: `${item.top + offY}%`, size: `${item.size}%`, rotate: `${rot.toFixed(1)}deg` },
       ];
     })
   );
@@ -78,7 +83,8 @@ export function KitchenTable({
   onDrop,
   onOverflow,
 }: KitchenTableProps) {
-  const [tablePositions] = useState(generatePositions);
+  const [tablePositions, setTablePositions] = useState(staticPositions);
+  useEffect(() => { setTablePositions(randomPositions()); }, []);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragPos, setDragPos] = useState<{ x: number; y: number } | null>(null);
   const [isOverBowl, setIsOverBowl] = useState(false);

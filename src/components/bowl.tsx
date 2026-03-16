@@ -398,13 +398,12 @@ function MixedView({
   );
 }
 
-/** Seeded random 0~1 */
+/** Deterministic hash-based random 0~1 (identical on server & client) */
 function rand(seed: number): number {
-  const x = Math.sin(seed * 9301 + 49297) * 49297;
-  return x - Math.floor(x);
+  return ((seed * 2654435761) >>> 0) / 4294967296;
 }
 
-/** Random point inside the bowl circle (center 120, radius ~80) */
+/** Random point inside the bowl circle (center 120, radius ~75) */
 function randInBowl(seed: number): [number, number] {
   const angle = rand(seed) * Math.PI * 2;
   const r = Math.sqrt(rand(seed + 1)) * 75;

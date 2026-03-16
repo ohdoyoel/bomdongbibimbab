@@ -2,6 +2,23 @@
 
 import React from "react";
 
+// Precomputed rice grains: [cx, cy, rx, ry, rotation, isDark]
+const RICE_GRAINS: [number, number, number, number, number, boolean][] = (() => {
+  // Simple integer-based hash for determinism across server/client
+  function h(s: number) { return ((s * 2654435761) >>> 0) / 4294967296; }
+  const grains: [number, number, number, number, number, boolean][] = [];
+  for (let i = 0; i < 40; i++) {
+    const angle = h(i * 5) * Math.PI * 2;
+    const dist = Math.sqrt(h(i * 5 + 1)) * 24;
+    const x = 50 + Math.cos(angle) * dist;
+    const y = 50 + Math.sin(angle) * dist;
+    const rot = h(i * 5 + 2) * 180;
+    const sz = 2.5 + h(i * 5 + 3) * 2;
+    grains.push([+x.toFixed(2), +y.toFixed(2), +sz.toFixed(2), +(sz * 0.38).toFixed(2), +rot.toFixed(1), h(i * 5 + 4) > 0.5]);
+  }
+  return grains;
+})();
+
 // ─── Rice in rice cooker (top-view, lid open) ────────
 export function RiceSvg({ className = "" }: { className?: string }) {
   return (
@@ -14,21 +31,12 @@ export function RiceSvg({ className = "" }: { className?: string }) {
       <circle cx="50" cy="50" r="30" fill="#555" />
       {/* Rice inside */}
       <circle cx="50" cy="50" r="28" fill="#FEFEFE" />
-      {/* Dense rice grain texture */}
-      {Array.from({ length: 40 }, (_, i) => {
-        const a = Math.sin(i * 9301 + 49297) * 49297; const rnd = (s: number) => { const x = Math.sin(s * 9301 + 49297) * 49297; return x - Math.floor(x); };
-        const angle = rnd(i * 5) * Math.PI * 2;
-        const dist = Math.sqrt(rnd(i * 5 + 1)) * 24;
-        const x = 50 + Math.cos(angle) * dist;
-        const y = 50 + Math.sin(angle) * dist;
-        const rot = rnd(i * 5 + 2) * 180;
-        const sz = 2.5 + rnd(i * 5 + 3) * 2;
-        return (
-          <ellipse key={i} cx={x} cy={y} rx={sz} ry={sz * 0.38}
-            fill={rnd(i * 5 + 4) > 0.5 ? "#F0EDE5" : "#E8E4D8"}
-            transform={`rotate(${rot} ${x} ${y})`} />
-        );
-      })}
+      {/* Dense rice grain texture — precomputed positions */}
+      {RICE_GRAINS.map(([x, y, rx, ry, rot, dark], i) => (
+        <ellipse key={i} cx={x} cy={y} rx={rx} ry={ry}
+          fill={dark ? "#E8E4D8" : "#F0EDE5"}
+          transform={`rotate(${rot} ${x} ${y})`} />
+      ))}
       {/* Steam */}
       <g opacity="0.2">
         <path d="M42 28 Q44 20 40 14" stroke="#999" strokeWidth="1.2" fill="none" strokeLinecap="round" />
