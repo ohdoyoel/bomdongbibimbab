@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { INGREDIENTS, BOWL_CAPACITY, type Ingredient, type DroppedItem } from "@/lib/cooking-steps";
 import { KitchenTable } from "@/components/kitchen-table";
 import { Bowl } from "@/components/bowl";
@@ -31,8 +31,14 @@ function HomeInner() {
   const [isMixing, setIsMixing] = useState(false);
   const [mixed, setMixed] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [totalCount, setTotalCount] = useState<number | null>(null);
 
   const adapter = useSnackbarAdapter();
+
+  // Fetch total count on mount
+  useEffect(() => {
+    fetch("/api/count").then(r => r.json()).then(d => setTotalCount(d.count)).catch(() => {});
+  }, []);
 
   const fillAmount = drops.reduce((sum, d) => {
     const ing = ingredients.find((i) => i.id === d.ingredientId);
@@ -71,6 +77,9 @@ function HomeInner() {
   const handleMix = useCallback(() => {
     setIsMixing(true);
     setPhase("mixing");
+    // Increment counter
+    fetch("/api/count", { method: "POST" })
+      .then(r => r.json()).then(d => setTotalCount(d.count)).catch(() => {});
     setTimeout(() => {
       setMixed(true);
       setIsMixing(false);
@@ -95,7 +104,10 @@ function HomeInner() {
             <Bowl ingredients={ingredients} drops={drops} fillAmount={fillAmount} isOver={false} isMixing={false} mixed={true} />
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">완성!</h1>
-          <p className="text-lg text-foreground/60 mb-3">나만의 봄동비빔밥이 완성되었어요!</p>
+          <p className="text-lg text-foreground/60 mb-1">나만의 봄동비빔밥이 완성되었어요!</p>
+          {totalCount !== null && (
+            <p className="text-xs text-foreground/35 mb-3">지금까지 만들어진 봄동비빔밥 {totalCount.toLocaleString()}그릇</p>
+          )}
           {/* Recipe summary with SVG icons */}
           <div className="flex flex-wrap justify-center gap-2 mb-6 max-w-[320px]">
             {Object.entries(dropCounts).map(([id, count]) => {
@@ -144,7 +156,10 @@ function HomeInner() {
                 <Bowl ingredients={ingredients} drops={drops} fillAmount={fillAmount} isOver={false} isMixing={false} mixed={true} />
               </div>
               <h1 className="text-3xl font-bold text-foreground mb-2">완성!</h1>
-              <p className="text-lg text-foreground/60 mb-3">나만의 봄동비빔밥이 완성되었어요!</p>
+              <p className="text-lg text-foreground/60 mb-1">나만의 봄동비빔밥이 완성되었어요!</p>
+              {totalCount !== null && (
+                <p className="text-xs text-foreground/35 mb-3">지금까지 만들어진 봄동비빔밥 {totalCount.toLocaleString()}그릇</p>
+              )}
               <div className="flex flex-wrap justify-center gap-2 max-w-[320px]">
                 {Object.entries(dropCounts).map(([id, count]) => {
                   const ing = ingredients.find((i) => i.id === id);
