@@ -35,9 +35,9 @@ function HomeInner() {
 
   const adapter = useSnackbarAdapter();
 
-  // Fetch total count on mount
+  // Increment visit count on mount
   useEffect(() => {
-    fetch("/api/count").then(r => r.json()).then(d => setTotalCount(d.count)).catch(() => {});
+    fetch("/api/count", { method: "POST" }).then(r => r.json()).then(d => setTotalCount(d.count)).catch(() => {});
   }, []);
 
   const fillAmount = drops.reduce((sum, d) => {
@@ -77,9 +77,6 @@ function HomeInner() {
   const handleMix = useCallback(() => {
     setIsMixing(true);
     setPhase("mixing");
-    // Increment counter
-    fetch("/api/count", { method: "POST" })
-      .then(r => r.json()).then(d => setTotalCount(d.count)).catch(() => {});
     setTimeout(() => {
       setMixed(true);
       setIsMixing(false);
